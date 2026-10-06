@@ -12,8 +12,8 @@ import { buildForgeTools } from "./tools.js";
 
 const cfg = forgeConfigFromEnv();
 await runMcpServer({
-  name: "forge-gateway",
+  name: "agent-gateway",
   version: "0.1.0",
   tools: buildForgeTools(new ForgeClient(cfg)),
-  banner: `forge-gateway MCP ready (forge: ${cfg.url})`,
+  banner: `agent-gateway [forge adapter] MCP ready (forge: ${cfg.url})`,
 });

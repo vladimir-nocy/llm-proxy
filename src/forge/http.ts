@@ -17,7 +17,7 @@ const cfg = forgeConfigFromEnv();
 const gw = gatewayConfig();
 
 startHttpGateway({
-  name: "forge-gateway",
+  name: "agent-gateway",
   version: "0.1.0",
   tools: buildForgeTools(new ForgeClient(cfg)),
   client: new ForgeClient(cfg),

@@ -1,15 +1,15 @@
 {
-  "name": "forge-gateway",
+  "name": "agent-gateway",
   "version": "0.1.0",
-  "description": "Expose the Forge studio API (or any cookie-authenticated HTTP API) as MCP tools + HTTP endpoints for Claude Code, Codex CLI and scripts",
+  "description": "Expose any web API as MCP tools + HTTP endpoints for Claude Code, Codex CLI and scripts — ships with a Forge adapter, bring your own",
   "type": "module",
   "license": "MIT",
   "engines": {
     "node": ">=20"
   },
   "bin": {
-    "forge-mcp": "dist/forge/mcp.js",
-    "forge-http": "dist/forge/http.js"
+    "agent-gateway-mcp": "dist/forge/mcp.js",
+    "agent-gateway-http": "dist/forge/http.js"
   },
   "files": [
     "dist",
