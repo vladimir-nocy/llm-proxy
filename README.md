@@ -15,8 +15,9 @@ Codex CLI  ──┘    (this repo)                    └── HTTP (curl)   �
                     · curated tools + generic passthrough
 ```
 
-- **MCP over stdio** — both CLIs support MCP servers natively; the tools show
-  up as regular agent tools.
+- **MCP over stdio** — Claude Code and Codex CLI both support MCP servers
+  natively (`claude mcp add …` / `codex mcp add …`); the tools show up as
+  regular agent tools in either.
 - **HTTP + JSON** — the same tools via `POST /rpc`, plus a direct authenticated
   passthrough at `/<adapter>/<path>` for anything the curated tools don't cover.
 
@@ -69,13 +70,9 @@ node dist/forge/mcp.js     # MCP stdio server (started by the CLIs, not by you)
 ```sh
 # Claude Code
 claude mcp add forge -- node /path/to/claude-codex-api/dist/forge/mcp.js
-```
 
-```toml
-# Codex CLI — ~/.codex/config.toml
-[mcp_servers.forge]
-command = "node"
-args = ["/path/to/claude-codex-api/dist/forge/mcp.js"]
+# Codex CLI
+codex mcp add forge -- node /path/to/claude-codex-api/dist/forge/mcp.js
 ```
 
 Then ask either agent things like:
