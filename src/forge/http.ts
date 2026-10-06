@@ -17,7 +17,7 @@ const cfg = forgeConfigFromEnv();
 const gw = gatewayConfig();
 
 startHttpGateway({
-  name: "agent-gateway",
+  name: "claude-codex-api",
   version: "0.1.0",
   tools: buildForgeTools(new ForgeClient(cfg)),
   client: new ForgeClient(cfg),

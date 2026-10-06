@@ -18,5 +18,5 @@ export function gatewayConfig() {
 
 /** Default on-disk session cache path for a named adapter. */
 export function defaultSessionFile(adapter: string): string {
-  return resolve(homedir(), ".agent-gateway", `${adapter}-session.json`);
+  return resolve(homedir(), ".claude-codex-api", `${adapter}-session.json`);
 }

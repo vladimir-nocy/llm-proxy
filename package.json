@@ -1,5 +1,5 @@
 {
-  "name": "agent-gateway",
+  "name": "claude-codex-api",
   "version": "0.1.0",
   "description": "Expose any web API as MCP tools + HTTP endpoints for Claude Code, Codex CLI and scripts — ships with a Forge adapter, bring your own",
   "type": "module",
@@ -8,8 +8,8 @@
     "node": ">=20"
   },
   "bin": {
-    "agent-gateway-mcp": "dist/forge/mcp.js",
-    "agent-gateway-http": "dist/forge/http.js"
+    "claude-codex-api-mcp": "dist/forge/mcp.js",
+    "claude-codex-api-http": "dist/forge/http.js"
   },
   "files": [
     "dist",

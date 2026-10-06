@@ -1,16 +1,16 @@
-# agent-gateway
+# claude-codex-api
 
 **Expose any web API as native agent tools for Claude Code and Codex CLI.**
 
-`agent-gateway` is a small sidecar that sits between CLI coding agents and a
+`claude-codex-api` is a small sidecar that sits between CLI coding agents and a
 web API. It owns the authenticated session and exposes the API as tools over
 two protocols at once:
 
 ```
-Claude Code ─┐                                ┌── MCP (stdio)   ← agents use it as native tools
-             ├─►  agent-gateway  ──►  any API │
-Codex CLI  ──┘    (this repo)                 └── HTTP (curl)   ← scripts, workflows, you
-                    · owns the login session
+Claude Code ─┐                                   ┌── MCP (stdio)   ← agents use it as native tools
+             ├─►  claude-codex-api  ──►  any API │
+Codex CLI  ──┘    (this repo)                    └── HTTP (curl)   ← scripts, workflows, you
+                       · owns the login session
                     · normalizes errors
                     · curated tools + generic passthrough
 ```
@@ -29,8 +29,8 @@ own is ~200 lines (see [Adding another API](#adding-another-api)).
 ## Install
 
 ```sh
-git clone https://github.com/billy-boys/agent-gateway
-cd agent-gateway
+git clone https://github.com/billy-boys/claude-codex-api
+cd claude-codex-api
 npm install && npm run build
 cp .env.example .env   # then fill in the adapter's auth (see below)
 ```
@@ -68,14 +68,14 @@ node dist/forge/mcp.js     # MCP stdio server (started by the CLIs, not by you)
 
 ```sh
 # Claude Code
-claude mcp add forge -- node /path/to/agent-gateway/dist/forge/mcp.js
+claude mcp add forge -- node /path/to/claude-codex-api/dist/forge/mcp.js
 ```
 
 ```toml
 # Codex CLI — ~/.codex/config.toml
 [mcp_servers.forge]
 command = "node"
-args = ["/path/to/agent-gateway/dist/forge/mcp.js"]
+args = ["/path/to/claude-codex-api/dist/forge/mcp.js"]
 ```
 
 Then ask either agent things like:
