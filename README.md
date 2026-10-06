@@ -23,9 +23,14 @@ Codex CLI  ──┘    (this repo)                    └── HTTP (curl)   �
 
 It is **not tied to any one product**: the core (`src/core/`) is upstream-
 agnostic — a cookie-session API client, an MCP runner and an HTTP gateway.
-Specific services are wired in as **adapters**; this repo ships one
-(**Forge**, a game-studio pipeline API) as a working example, and adding your
-own is ~200 lines (see [Adding another API](#adding-another-api)).
+Specific services are wired in as **adapters**. This repo ships two:
+
+- **REST** (`src/rest/`) — point it at **any** API via env vars; bearer token,
+  API key or custom headers optional. This is the one to use outside Forge.
+- **Forge** (`src/forge/`) — a game-studio pipeline API, kept as a worked
+  example of a session-based adapter (~200 lines).
+
+Adding your own is ~200 lines (see [Adding another API](#adding-another-api)).
 
 ## Install
 
@@ -37,6 +42,37 @@ cp .env.example .env   # then fill in the adapter's auth (see below)
 ```
 
 Requires Node 20+.
+
+## Adapter: REST — any API, no Forge
+
+Point it at any JSON API. Copy `.env.example` and set:
+
+```
+REST_BASE_URL=https://api.github.com   # the API you want to expose
+
+# auth is optional — pick at most one:
+REST_TOKEN=ghp_xxx                     # → Authorization: Bearer <token>
+REST_API_KEY=key                       # → REST_API_KEY_HEADER (default x-api-key)
+REST_HEADERS={"x-team":"billy-boys"}   # extra static headers (JSON)
+```
+
+**Run:**
+
+```sh
+node dist/rest/http.js     # HTTP API on http://127.0.0.1:7781
+node dist/rest/mcp.js      # MCP stdio server
+```
+
+**Wire up the agents:**
+
+```sh
+claude mcp add myapi -- node /path/to/claude-codex-api/dist/rest/mcp.js
+codex mcp add myapi  -- node /path/to/claude-codex-api/dist/rest/mcp.js
+```
+
+Tools: `rest_get`, `rest_post`, `rest_request` (any method) — plus the
+`/rest/<path>` HTTP passthrough. Ask an agent: *"Use rest_get on /repos/
+facebook/react and summarize the repo."*
 
 ## Bundled adapter: Forge
 
@@ -127,6 +163,10 @@ against `/api/v1/*` (entities, runs, budgets, comments, snapshots,
 `/battle/*`, …).
 
 ## Adding another API
+
+The zero-code option is the REST adapter — it already handles any JSON API
+via env vars. Write a custom adapter only when you want curated tools,
+session login or blocked routes:
 
 An adapter is just a config + a client subclass + a tool list — see
 `src/forge/` (~200 lines total). To wire a different API:

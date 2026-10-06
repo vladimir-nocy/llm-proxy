@@ -9,7 +9,9 @@
   },
   "bin": {
     "claude-codex-api-mcp": "dist/forge/mcp.js",
-    "claude-codex-api-http": "dist/forge/http.js"
+    "claude-codex-api-http": "dist/forge/http.js",
+    "claude-codex-api-rest-mcp": "dist/rest/mcp.js",
+    "claude-codex-api-rest-http": "dist/rest/http.js"
   },
   "files": [
     "dist",

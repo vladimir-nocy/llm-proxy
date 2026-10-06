@@ -37,6 +37,8 @@ export class ApiClient {
 
   async ensureSession(): Promise<void> {
     if (this.cookie) return;
+    // Sessionless mode: no cookie, no credentials, no session file — nothing to do.
+    if (!this.o.staticCookie && !this.o.login && !this.o.sessionFile) return;
     if (this.o.staticCookie) {
       this.cookie = this.o.staticCookie;
       return;
@@ -80,7 +82,8 @@ export class ApiClient {
 
     const send = async () => {
       await this.ensureSession();
-      const headers: Record<string, string> = { cookie: this.cookie!, ...this.o.headers?.(method) };
+      const headers: Record<string, string> = { ...this.o.headers?.(method) };
+      if (this.cookie) headers.cookie = this.cookie;
       if (opts.body !== undefined) headers["content-type"] = "application/json";
       return fetch(url, {
         method,
