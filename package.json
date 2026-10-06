@@ -1,0 +1,37 @@
+{
+  "name": "forge-gateway",
+  "version": "0.1.0",
+  "description": "Expose the Forge studio API (or any cookie-authenticated HTTP API) as MCP tools + HTTP endpoints for Claude Code, Codex CLI and scripts",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "forge-mcp": "dist/forge/mcp.js",
+    "forge-http": "dist/forge/http.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    ".env.example"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "pretest": "npm run build",
+    "test": "node --test test/*.test.mjs",
+    "mcp": "node dist/forge/mcp.js",
+    "http": "node dist/forge/http.js",
+    "start": "npm run build && npm run http",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "~5.9.0"
+  }
+}
