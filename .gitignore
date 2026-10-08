@@ -1,4 +1,4 @@
-node_modules/
-dist/
+target/
 .env
-forge-session.json
+*session.json
+device-id

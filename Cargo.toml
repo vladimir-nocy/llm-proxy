@@ -1,0 +1,40 @@
+[package]
+name = "claude-codex-api"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+description = "Expose JSON APIs as MCP tools and authenticated HTTP endpoints"
+license = "MIT"
+default-run = "claude-codex-api-http"
+
+[dependencies]
+axum = "0.8.9"
+base64 = "0.22"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+dirs = "6"
+dotenvy = "0.15"
+futures-util = "0.3"
+jsonschema = { version = "0.58.6", default-features = false }
+percent-encoding = "2"
+reqwest = { version = "0.13.5", default-features = false, features = ["json", "rustls", "stream"] }
+rmcp = { version = "3.5.1", default-features = false, features = ["server", "transport-io"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "sync", "fs", "signal", "io-util", "process", "time"] }
+uuid = { version = "1", features = ["v4", "v5"] }
+
+[dev-dependencies]
+tempfile = "3"
+
+[[bin]]
+name = "claude-codex-api-http"
+path = "src/bin/claude_http.rs"
+
+[[bin]]
+name = "claude-codex-api-rest-http"
+path = "src/bin/rest_http.rs"
+
+[[bin]]
+name = "claude-codex-api-rest-mcp"
+path = "src/bin/rest_mcp.rs"
