@@ -10,6 +10,23 @@ use tokio::{
     time::timeout,
 };
 
+/// The system variables Windows processes require: without `SystemRoot`,
+/// Winsock cannot initialize and every TCP operation fails.
+fn system_env() -> Vec<(String, String)> {
+    [
+        "SystemRoot",
+        "windir",
+        "COMSPEC",
+        "PATH",
+        "TEMP",
+        "TMP",
+        "USERPROFILE",
+    ]
+    .iter()
+    .filter_map(|key| std::env::var(key).ok().map(|v| ((*key).to_owned(), v)))
+    .collect()
+}
+
 struct McpClient {
     child: Child,
     input: ChildStdin,
@@ -21,6 +38,7 @@ impl McpClient {
         let mut child = Command::new(binary)
             .current_dir(directory)
             .env_clear()
+            .envs(system_env())
             .envs(vars.iter().copied())
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
@@ -170,6 +188,7 @@ async fn http_executables_start_and_config_errors_fail_cleanly() {
         let mut child = Command::new(binary)
             .current_dir(dir.path())
             .env_clear()
+            .envs(system_env())
             .envs(extra)
             .env("GATEWAY_PORT", "0")
             .stderr(Stdio::piped())
@@ -211,6 +230,7 @@ async fn http_executables_start_and_config_errors_fail_cleanly() {
         let output = Command::new(env!("CARGO_BIN_EXE_llm-proxy-rest-http"))
             .current_dir(dir.path())
             .env_clear()
+            .envs(system_env())
             .envs(vars)
             .output()
             .await
