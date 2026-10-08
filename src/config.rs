@@ -76,7 +76,7 @@ impl ClaudeConfig {
             .unwrap_or_else(|| home.join(".claude/.credentials.json"));
         let session_file = env("CLAUDE_SESSION_FILE")
             .map(PathBuf::from)
-            .unwrap_or_else(|| home.join(".claude-codex-api/claude-session.json"));
+            .unwrap_or_else(|| home.join(".llm-proxy/claude-session.json"));
         Ok(Self {
             oauth_token: env("CLAUDE_CODE_OAUTH_TOKEN").or_else(|| env("CLAUDE_OAUTH_TOKEN")),
             credentials_file,
@@ -116,7 +116,7 @@ impl CodexConfig {
                 .unwrap_or_else(|| codex_home.join("auth.json")),
             session_file: env("CODEX_SESSION_FILE")
                 .map(PathBuf::from)
-                .unwrap_or_else(|| home.join(".claude-codex-api/codex-session.json")),
+                .unwrap_or_else(|| home.join(".llm-proxy/codex-session.json")),
             api_base: env("CODEX_API_BASE")
                 .unwrap_or_else(|| "https://chatgpt.com/backend-api/codex".into()),
             token_url: env("CODEX_TOKEN_URL")

@@ -16,7 +16,7 @@ use axum::{
     http::StatusCode,
     response::{IntoResponse, Response},
 };
-use claude_codex_api::{
+use llm_proxy::{
     client::ApiClient,
     config::{AdapterConfig, RestConfig},
     http,
@@ -141,9 +141,9 @@ pub async fn rpc(base: &str, name: &str, args: Value) -> (StatusCode, Value) {
 
 // ── Claude adapter fixtures ─────────────────────────────────────────────
 
-use claude_codex_api::claude::{auth::TokenManager as ClaudeAuth, proxy::ClaudeProxy};
-use claude_codex_api::codex::{auth::TokenManager as CodexAuth, proxy::CodexProxy};
-use claude_codex_api::{config::ClaudeConfig, config::CodexConfig, gateway_http};
+use llm_proxy::claude::{auth::TokenManager as ClaudeAuth, proxy::ClaudeProxy};
+use llm_proxy::codex::{auth::TokenManager as CodexAuth, proxy::CodexProxy};
+use llm_proxy::{config::ClaudeConfig, config::CodexConfig, gateway_http};
 
 #[derive(Default)]
 pub struct AnthropicFixture {
@@ -366,7 +366,7 @@ pub fn write_session(path: &std::path::Path, access: &str, refresh: &str) {
 
 // ── Codex adapter fixtures ──────────────────────────────────────────────
 
-use claude_codex_api::codex::auth::Credential;
+use llm_proxy::codex::auth::Credential;
 
 #[derive(Default)]
 pub struct ChatgptFixture {

@@ -810,5 +810,5 @@ pub async fn device_id(session_file: &Path) -> String {
 /// not exposed by the OAuth token; a stable namespace-derived value matches
 /// what peer proxies send.
 pub fn account_uuid() -> String {
-    uuid::Uuid::new_v5(&uuid::Uuid::NAMESPACE_OID, b"claude-codex-api").to_string()
+    uuid::Uuid::new_v5(&uuid::Uuid::NAMESPACE_OID, b"llm-proxy").to_string()
 }

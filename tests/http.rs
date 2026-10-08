@@ -3,8 +3,8 @@ mod common;
 use std::sync::Arc;
 
 use axum::http::StatusCode;
-use claude_codex_api::config::{AdapterConfig, ClaudeConfig, CodexConfig};
 use common::*;
+use llm_proxy::config::{AdapterConfig, ClaudeConfig, CodexConfig};
 use serde_json::{Value, json};
 
 #[tokio::test]
@@ -108,7 +108,7 @@ async fn rest_tools_auth_query_bodies_and_passthrough() {
 async fn api_key_and_sessionless_rest() {
     let (upstream, _) = upstream().await;
     let mut config = rest_config(&upstream.base);
-    let client = claude_codex_api::client::ApiClient::new(config.clone()).unwrap();
+    let client = llm_proxy::client::ApiClient::new(config.clone()).unwrap();
     let result = client.request("GET", "/echo", None, None).await.unwrap();
     assert!(result["headers"].get("cookie").is_none());
     assert!(result["headers"].get("authorization").is_none());
@@ -116,7 +116,7 @@ async fn api_key_and_sessionless_rest() {
         c.api_key = Some("key".into());
         c.api_key_header = "X-Custom-Key".into();
     }
-    let client = claude_codex_api::client::ApiClient::new(config).unwrap();
+    let client = llm_proxy::client::ApiClient::new(config).unwrap();
     let result = client.request("GET", "/echo", None, None).await.unwrap();
     assert_eq!(result["headers"]["x-custom-key"], "key");
 }
@@ -722,12 +722,11 @@ async fn gateway_serves_both_adapters_and_reports_status() {
         api_base: api.base.clone(),
         token_url: "http://unused/token".into(),
     };
-    let claude_auth = Arc::new(claude_codex_api::claude::auth::TokenManager::new(
+    let claude_auth = Arc::new(llm_proxy::claude::auth::TokenManager::new(
         claude_config.clone(),
     ));
     let claude_proxy = Arc::new(
-        claude_codex_api::claude::proxy::ClaudeProxy::new(claude_config, claude_auth.clone())
-            .unwrap(),
+        llm_proxy::claude::proxy::ClaudeProxy::new(claude_config, claude_auth.clone()).unwrap(),
     );
     let codex_config = CodexConfig {
         oauth_token: None,
@@ -736,12 +735,11 @@ async fn gateway_serves_both_adapters_and_reports_status() {
         api_base: format!("{}/codex", chatgpt.base),
         token_url: format!("{}/oauth/token", chatgpt.base),
     };
-    let codex_auth_mgr = Arc::new(claude_codex_api::codex::auth::TokenManager::new(
+    let codex_auth_mgr = Arc::new(llm_proxy::codex::auth::TokenManager::new(
         codex_config.clone(),
     ));
     let codex_proxy = Arc::new(
-        claude_codex_api::codex::proxy::CodexProxy::new(codex_config, codex_auth_mgr.clone())
-            .unwrap(),
+        llm_proxy::codex::proxy::CodexProxy::new(codex_config, codex_auth_mgr.clone()).unwrap(),
     );
     let gateway = full_gateway(
         Some(claude_proxy),

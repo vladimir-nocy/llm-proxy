@@ -1,4 +1,4 @@
-# claude-codex-api
+# llm-proxy
 
 Two things in one Rust binary set, no Node.js runtime required:
 
@@ -34,8 +34,8 @@ Scripts/curl ── HTTP /rpc ───────┘   (REST adapter)
 Requires Rust 1.88+ and a native C/C++ build toolchain for TLS dependencies. On macOS, install Xcode Command Line Tools; on Windows, use the MSVC Rust toolchain with Visual Studio C++ Build Tools and CMake.
 
 ```sh
-git clone https://github.com/billy-boys/claude-codex-api
-cd claude-codex-api
+git clone https://github.com/vladimir-nocy/llm-proxy
+cd llm-proxy
 cargo build --release --locked
 cp .env.example .env
 ```
@@ -46,9 +46,9 @@ The binaries are in `target/release/` (with `.exe` on Windows):
 
 | Binary | Adapters | Interface |
 | --- | --- | --- |
-| `claude-codex-api-http` | Claude + Codex | HTTP |
-| `claude-codex-api-rest-http` | REST | HTTP |
-| `claude-codex-api-rest-mcp` | REST | MCP stdio |
+| `llm-proxy-http` | Claude + Codex | HTTP |
+| `llm-proxy-rest-http` | REST | HTTP |
+| `llm-proxy-rest-mcp` | REST | MCP stdio |
 
 To install them into Cargo's binary directory:
 
@@ -70,7 +70,7 @@ The gateway presents itself to Anthropic as a Claude Code CLI session:
 Token sources, in precedence order:
 
 1. `CLAUDE_CODE_OAUTH_TOKEN` (or `CLAUDE_OAUTH_TOKEN`) — a literal token; never refreshed
-2. The gateway's session file (`CLAUDE_SESSION_FILE`, default `~/.claude-codex-api/claude-session.json`) — tokens minted by the login flow and all refresh results
+2. The gateway's session file (`CLAUDE_SESSION_FILE`, default `~/.llm-proxy/claude-session.json`) — tokens minted by the login flow and all refresh results
 3. Claude Code's credentials (`~/.claude/.credentials.json`, or the macOS Keychain entry `Claude Code-credentials` unless `CLAUDE_USE_KEYCHAIN=0`)
 
 Expired tokens refresh automatically against `platform.claude.com/v1/oauth/token` (single-flight, exponential backoff, refresh results persisted to the session file). If a refresh token is revoked, the gateway falls through to the next source.
@@ -90,7 +90,7 @@ The gateway runs the OAuth PKCE flow (callback on `localhost:54545`), opens your
 # Optional overrides
 # CLAUDE_API_BASE=https://api.anthropic.com
 # CLAUDE_TOKEN_URL=https://platform.claude.com/v1/oauth/token
-# CLAUDE_SESSION_FILE=~/.claude-codex-api/claude-session.json
+# CLAUDE_SESSION_FILE=~/.llm-proxy/claude-session.json
 # CLAUDE_CREDENTIALS_FILE=~/.claude/.credentials.json
 # CLAUDE_USE_KEYCHAIN=1
 
@@ -134,7 +134,7 @@ Responses pass through verbatim, including upstream error statuses and SSE strea
 Token sources, in precedence order:
 
 1. `CODEX_OAUTH_TOKEN` — a literal token; never refreshed
-2. The gateway's session file (`CODEX_SESSION_FILE`, default `~/.claude-codex-api/codex-session.json`)
+2. The gateway's session file (`CODEX_SESSION_FILE`, default `~/.llm-proxy/codex-session.json`)
 3. Codex CLI's credentials (`$CODEX_HOME/auth.json`, default `~/.codex/auth.json`)
 
 There is no browser login flow: run `codex login` once on the machine, the gateway picks up the credential from there. The access token's expiry comes from its JWT `exp` claim; expired tokens refresh against `auth.openai.com/oauth/token` (single-flight, exponential backoff), and because OpenAI refresh tokens rotate, the result is written back to `auth.json` so the CLI stays logged in. If a refresh token is revoked, the gateway falls through to the next source.
@@ -143,7 +143,7 @@ There is no browser login flow: run `codex login` once on the machine, the gatew
 # Optional overrides
 # CODEX_API_BASE=https://chatgpt.com/backend-api/codex
 # CODEX_TOKEN_URL=https://auth.openai.com/oauth/token
-# CODEX_SESSION_FILE=~/.claude-codex-api/codex-session.json
+# CODEX_SESSION_FILE=~/.llm-proxy/codex-session.json
 # CODEX_AUTH_FILE=~/.codex/auth.json
 ```
 
@@ -174,7 +174,7 @@ curl -s http://127.0.0.1:7781/rpc \
   -d '{"name":"rest_get","args":{"path":"/repos/facebook/react"}}'
 ```
 
-Configure an MCP client to launch the absolute path to `claude-codex-api-rest-mcp`, with no command arguments and the REST environment settings above. The client communicates over stdin/stdout; diagnostics go to stderr.
+Configure an MCP client to launch the absolute path to `llm-proxy-rest-mcp`, with no command arguments and the REST environment settings above. The client communicates over stdin/stdout; diagnostics go to stderr.
 
 ## HTTP API (REST adapter)
 

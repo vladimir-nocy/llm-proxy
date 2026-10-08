@@ -241,28 +241,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "claude-codex-api"
-version = "0.1.0"
-dependencies = [
- "axum",
- "base64 0.22.1",
- "chrono",
- "dirs",
- "dotenvy",
- "futures-util",
- "jsonschema",
- "percent-encoding",
- "reqwest",
- "rmcp",
- "serde",
- "serde_json",
- "sha2",
- "tempfile",
- "tokio",
- "uuid",
-]
-
-[[package]]
 name = "cmake"
 version = "0.1.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1042,6 +1020,28 @@ name = "litemap"
 version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "47d9d19d1d6efa0109d2f65ff4c85cddd50bd572e5a00127ab10987290bcefae"
+
+[[package]]
+name = "llm-proxy"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "base64 0.22.1",
+ "chrono",
+ "dirs",
+ "dotenvy",
+ "futures-util",
+ "jsonschema",
+ "percent-encoding",
+ "reqwest",
+ "rmcp",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tempfile",
+ "tokio",
+ "uuid",
+]
 
 [[package]]
 name = "lock_api"

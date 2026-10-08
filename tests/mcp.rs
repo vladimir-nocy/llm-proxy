@@ -37,7 +37,7 @@ impl McpClient {
         };
         let initialized = client.request(1, "initialize", json!({"protocolVersion": "2025-11-25", "capabilities": {}, "clientInfo": {"name": "integration-test", "version": "1.0"}})).await;
         assert_eq!(
-            initialized["result"]["serverInfo"]["name"], "claude-codex-api",
+            initialized["result"]["serverInfo"]["name"], "llm-proxy",
             "{initialized}"
         );
         assert!(initialized["result"]["capabilities"]["tools"].is_object());
@@ -103,7 +103,7 @@ async fn rest_stdio_protocol_discovery_calls_errors_and_dotenv() {
     )
     .unwrap();
     let mut mcp = McpClient::start(
-        env!("CARGO_BIN_EXE_claude-codex-api-rest-mcp"),
+        env!("CARGO_BIN_EXE_llm-proxy-rest-mcp"),
         dir.path(),
         &[("REST_TOKEN", "exported")],
     )
@@ -159,11 +159,11 @@ async fn http_executables_start_and_config_errors_fail_cleanly() {
     let dir = tempfile::tempdir().unwrap();
     for (binary, extra) in [
         (
-            env!("CARGO_BIN_EXE_claude-codex-api-rest-http"),
+            env!("CARGO_BIN_EXE_llm-proxy-rest-http"),
             vec![("REST_BASE_URL", "http://127.0.0.1:1")],
         ),
         (
-            env!("CARGO_BIN_EXE_claude-codex-api-http"),
+            env!("CARGO_BIN_EXE_llm-proxy-http"),
             vec![("CLAUDE_SESSION_FILE", "session.json")],
         ),
     ] {
@@ -208,7 +208,7 @@ async fn http_executables_start_and_config_errors_fail_cleanly() {
             ("GATEWAY_PORT", "invalid"),
         ],
     ] {
-        let output = Command::new(env!("CARGO_BIN_EXE_claude-codex-api-rest-http"))
+        let output = Command::new(env!("CARGO_BIN_EXE_llm-proxy-rest-http"))
             .current_dir(dir.path())
             .env_clear()
             .envs(vars)

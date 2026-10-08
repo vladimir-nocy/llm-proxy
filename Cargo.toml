@@ -1,11 +1,11 @@
 [package]
-name = "claude-codex-api"
+name = "llm-proxy"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.88"
-description = "Expose JSON APIs as MCP tools and authenticated HTTP endpoints"
+description = "Expose Claude and ChatGPT/Codex subscriptions as Anthropic- and OpenAI-compatible APIs; any JSON API as MCP tools"
 license = "MIT"
-default-run = "claude-codex-api-http"
+default-run = "llm-proxy-http"
 
 [dependencies]
 axum = "0.8.9"
@@ -28,13 +28,13 @@ uuid = { version = "1", features = ["v4", "v5"] }
 tempfile = "3"
 
 [[bin]]
-name = "claude-codex-api-http"
+name = "llm-proxy-http"
 path = "src/bin/claude_http.rs"
 
 [[bin]]
-name = "claude-codex-api-rest-http"
+name = "llm-proxy-rest-http"
 path = "src/bin/rest_http.rs"
 
 [[bin]]
-name = "claude-codex-api-rest-mcp"
+name = "llm-proxy-rest-mcp"
 path = "src/bin/rest_mcp.rs"

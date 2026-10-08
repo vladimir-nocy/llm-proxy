@@ -15,7 +15,7 @@ use client::ApiClient;
 use config::{AdapterConfig, GatewayConfig};
 use tools::ToolRegistry;
 
-pub const NAME: &str = "claude-codex-api";
+pub const NAME: &str = "llm-proxy";
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// Shared startup for the standalone executables: `"claude"` serves the
