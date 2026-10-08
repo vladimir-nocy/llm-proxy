@@ -102,6 +102,7 @@ enum Source {
     Env,
     Session,
     CredentialsFile,
+    #[cfg(target_os = "macos")]
     Keychain,
 }
 
@@ -260,8 +261,6 @@ impl TokenManager {
                     }
                     #[cfg(target_os = "macos")]
                     Source::Keychain => write_back_keychain(&merged).await,
-                    #[cfg(not(target_os = "macos"))]
-                    Source::Keychain => {}
                     Source::Env => {}
                 }
                 *guard = Some((source, merged.clone()));
