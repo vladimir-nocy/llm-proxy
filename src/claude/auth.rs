@@ -258,7 +258,10 @@ impl TokenManager {
                     Source::CredentialsFile => {
                         write_back_credentials_file(&self.config.credentials_file, &merged).await;
                     }
+                    #[cfg(target_os = "macos")]
                     Source::Keychain => write_back_keychain(&merged).await,
+                    #[cfg(not(target_os = "macos"))]
+                    Source::Keychain => {}
                     Source::Env => {}
                 }
                 *guard = Some((source, merged.clone()));
@@ -738,6 +741,7 @@ async fn write_back_credentials_file(path: &Path, token: &OAuthToken) {
 
 /// Write refreshed tokens back into Claude Code's macOS Keychain entry,
 /// updating the existing item in place (same mechanism the CLI itself uses).
+#[cfg(target_os = "macos")]
 async fn write_back_keychain(token: &OAuthToken) {
     let blob = serde_json::json!({ "claudeAiOauth": oauth_json(token) }).to_string();
     let account = keychain_account().await;
