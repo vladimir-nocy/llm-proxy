@@ -112,6 +112,7 @@ impl Source {
             Self::Env => "env",
             Self::Session => "session-file",
             Self::CredentialsFile => "credentials-file",
+            #[cfg(target_os = "macos")]
             Self::Keychain => "keychain",
         }
     }
